@@ -17,7 +17,7 @@ async function run() {
     // Can't install VSWhere.exe for Ubuntu image etc..
     const IS_WINDOWS = process.platform === 'win32';
     if(IS_WINDOWS === false){
-      core.setFailed("MSBuild.exe only works for Windows.");
+      core.setFailed("MSTest.exe only works for Windows.");
       return;
     }
 
@@ -28,11 +28,11 @@ async function run() {
     if(directoryToAddToPath){
       core.debug(`Found local cached tool at ${directoryToAddToPath} adding that to path`);
 
-      var msBuildPath = await FindMSBuild(directoryToAddToPath);
-      core.debug(`MSBuildPath == ${msBuildPath}`);
+      var msTestPath = await FindMSBuild(directoryToAddToPath);
+      core.debug(`MSTestPath == ${msTestPath}`);
 
       // Add folder where MSBuild lives to the PATH
-      await core.addPath(msBuildPath);
+      await core.addPath(msTestPath);
       return;
     }
 
@@ -49,11 +49,11 @@ async function run() {
     var cachedToolDir = await tc.cacheDir(folder, "vswhere", "2.7.1");
     core.debug(`Cached Tool Dir ${cachedToolDir}`);
 
-    var msBuildPath = await FindMSBuild(cachedToolDir);
-    core.debug(`MSBuildPath == ${msBuildPath}`);
+    var msTestPath = await FindMSBuild(cachedToolDir);
+    core.debug(`MSTestPath == ${msTestPath}`);
 
     // Add folder where MSBuild lives to the PATH
-    await core.addPath(msBuildPath);
+    await core.addPath(msTestPath);
 
   } catch (error) {
     core.setFailed(error.message);
@@ -65,13 +65,13 @@ run();
 
 async function FindMSBuild(pathToVSWhere:string):Promise<string>{
 
-  var msBuildPath = "";
+  var msTestPath = "";
 
   const options:ExecOptions = {};
   options.listeners = {
     stdout: (data: Buffer) => {
       var output = data.toString();
-      msBuildPath += output;
+      msTestPath += output;
     }
   };
 
@@ -79,12 +79,12 @@ async function FindMSBuild(pathToVSWhere:string):Promise<string>{
   var vsWhereExe = path.join(pathToVSWhere, "vswhere.exe");
   await exec.exec(vsWhereExe, ['-latest', '-requires', 'Microsoft.Component.MSBuild', '-find', 'MSBuild\\**\\Bin\\MSBuild.exe'], options);
 
-  if(msBuildPath === ""){
+  if(msTestPath === ""){
     core.setFailed("Unable to find MSBuild.exe");
   }
 
-  var folderForMSBuild = path.dirname(msBuildPath)
-  core.debug(`MSBuild = ${msBuildPath}`);
+  var folderForMSBuild = path.dirname(msTestPath)
+  core.debug(`MSTest = ${msTestPath}`);
   core.debug(`Folder for MSBuild ${folderForMSBuild}`);
 
   return folderForMSBuild;
