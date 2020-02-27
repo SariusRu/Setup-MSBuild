@@ -17,7 +17,7 @@ async function run() {
     // Can't install VSWhere.exe for Ubuntu image etc..
     const IS_WINDOWS = process.platform === 'win32';
     if(IS_WINDOWS === false){
-      core.setFailed("MSBuild.exe only works for Windows.");
+      core.setFailed("MSTest.exe only works for Windows.");
       return;
     }
 
@@ -28,11 +28,11 @@ async function run() {
     if(directoryToAddToPath){
       core.debug(`Found local cached tool at ${directoryToAddToPath} adding that to path`);
 
-      var msBuildPath = await FindMSBuild(directoryToAddToPath);
-      core.debug(`MSBuildPath == ${msBuildPath}`);
+      var msTestPath = await FindMSBuild(directoryToAddToPath);
+      core.debug(`MSBuildPath == ${msTestPath}`);
 
       // Add folder where MSBuild lives to the PATH
-      await core.addPath(msBuildPath);
+      await core.addPath(msTestPath);
       return;
     }
 
