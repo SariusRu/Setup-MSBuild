@@ -8,10 +8,10 @@ import { ExecOptions } from '@actions/exec/lib/interfaces';
 async function run() {
   try {
 
-    // MSBuild is not a tool we download
+    // MSTest is not a tool we download
     // as Visual Studio is installed on Windows machines
     // However we need to download & use VSWhere to tell us
-    // where MSBuild is so we can add it that dir to the PATH
+    // where MSTest is so we can add it that dir to the PATH
 
     // Tripple check it's Windows process
     // Can't install VSWhere.exe for Ubuntu image etc..
@@ -31,7 +31,7 @@ async function run() {
       var msTestPath = await FindMSTest(directoryToAddToPath);
       core.debug(`MSTestPath == ${msTestPath}`);
 
-      // Add folder where MSBuild lives to the PATH
+      // Add folder where MSTest lives to the PATH
       await core.addPath(msTestPath);
       return;
     }
@@ -52,7 +52,7 @@ async function run() {
     var msTestPath = await FindMSTest(cachedToolDir);
     core.debug(`MSTestPath == ${msTestPath}`);
 
-    // Add folder where MSBuild lives to the PATH
+    // Add folder where MSTest lives to the PATH
     await core.addPath(msTestPath);
 
   } catch (error) {
@@ -75,7 +75,7 @@ async function FindMSTest(pathToVSWhere:string):Promise<string>{
     }
   };
 
-  // Run VSWhere to tell us where MSBuild is
+  // Run VSWhere to tell us where MSTest is
   var vsWhereExe = path.join(pathToVSWhere, "vswhere.exe");
   await exec.exec(vsWhereExe, ['-latest', '-requires', 'Microsoft.Component.MSTest', '-find', 'Common7\\**\\MSTest.exe'], options);
 
@@ -83,9 +83,9 @@ async function FindMSTest(pathToVSWhere:string):Promise<string>{
     core.setFailed("Unable to find MSTest.exe");
   }
 
-  var folderForMSBuild = path.dirname(msTestPath)
+  var folderForMSTest = path.dirname(msTestPath)
   core.debug(`MSTest = ${msTestPath}`);
-  core.debug(`Folder for MSTest ${folderForMSBuild}`);
+  core.debug(`Folder for MSTest ${folderForMSTest}`);
 
-  return folderForMSBuild;
+  return folderForMSTest;
 }
