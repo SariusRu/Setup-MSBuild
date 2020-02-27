@@ -77,7 +77,7 @@ async function FindMSTest(pathToVSWhere:string):Promise<string>{
 
   // Run VSWhere to tell us where MSTest is
   var vsWhereExe = path.join(pathToVSWhere, "vswhere.exe");
-  await exec.exec(vsWhereExe, ['-latest', '-requires', 'Microsoft.Component.MSTest', '-find', 'Common7\\**\\MSTest.exe'], options);
+  await exec.exec(vsWhereExe, ['-latest', '-requires', 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64', '-property', 'installationPath'], options);
 
   if(msTestPath === ""){
     core.setFailed("Unable to find MSTest.exe");
