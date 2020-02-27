@@ -28,7 +28,7 @@ async function run() {
     if(directoryToAddToPath){
       core.debug(`Found local cached tool at ${directoryToAddToPath} adding that to path`);
 
-      var msTestPath = await FindMSBuild(directoryToAddToPath);
+      var msTestPath = await FindMSTest(directoryToAddToPath);
       core.debug(`MSTestPath == ${msTestPath}`);
 
       // Add folder where MSBuild lives to the PATH
@@ -49,7 +49,7 @@ async function run() {
     var cachedToolDir = await tc.cacheDir(folder, "vswhere", "2.7.1");
     core.debug(`Cached Tool Dir ${cachedToolDir}`);
 
-    var msTestPath = await FindMSBuild(cachedToolDir);
+    var msTestPath = await FindMSTest(cachedToolDir);
     core.debug(`MSTestPath == ${msTestPath}`);
 
     // Add folder where MSBuild lives to the PATH
@@ -63,7 +63,7 @@ async function run() {
 run();
 
 
-async function FindMSBuild(pathToVSWhere:string):Promise<string>{
+async function FindMSTest(pathToVSWhere:string):Promise<string>{
 
   var msTestPath = "";
 
@@ -77,15 +77,15 @@ async function FindMSBuild(pathToVSWhere:string):Promise<string>{
 
   // Run VSWhere to tell us where MSBuild is
   var vsWhereExe = path.join(pathToVSWhere, "vswhere.exe");
-  await exec.exec(vsWhereExe, ['-latest', '-requires', 'Microsoft.Component.MSBuild', '-find', 'MSBuild\\**\\Bin\\MSBuild.exe'], options);
+  await exec.exec(vsWhereExe, ['-latest', '-requires', 'Microsoft.Component.MSTest', '-find', 'Common7\\**\\MSTest.exe'], options);
 
   if(msTestPath === ""){
-    core.setFailed("Unable to find MSBuild.exe");
+    core.setFailed("Unable to find MSTest.exe");
   }
 
   var folderForMSBuild = path.dirname(msTestPath)
   core.debug(`MSTest = ${msTestPath}`);
-  core.debug(`Folder for MSBuild ${folderForMSBuild}`);
+  core.debug(`Folder for MSTest ${folderForMSBuild}`);
 
   return folderForMSBuild;
 }
