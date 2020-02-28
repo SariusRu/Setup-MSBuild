@@ -22,19 +22,19 @@ async function run() {
     }
 
     // Try & find tool in cache
-    let directoryToAddToPath:string;
-    directoryToAddToPath = await tc.find("vswhere", "2.7.1");
+    // let directoryToAddToPath:string;
+    // directoryToAddToPath = await tc.find("vswhere", "2.7.1");
 
-    if(directoryToAddToPath){
-      core.debug(`Found local cached tool at ${directoryToAddToPath} adding that to path`);
+    // if(directoryToAddToPath){
+    //   core.debug(`Found local cached tool at ${directoryToAddToPath} adding that to path`);
 
-      var msTestPath = await FindMSTest(directoryToAddToPath);
-      core.debug(`MSTestPath == ${msTestPath}`);
+    //   var msTestPath = await FindMSTest(directoryToAddToPath);
+    //   core.debug(`MSTestPath == ${msTestPath}`);
 
-      // Add folder where MSTest lives to the PATH
-      await core.addPath(msTestPath);
-      return;
-    }
+    //   // Add folder where MSTest lives to the PATH
+    //   await core.addPath(msTestPath);
+    //   return;
+    // }
 
     // Download VSWhere 2.7.1 release
     core.debug("Downloading VSWhere v2.7.1 tool");
